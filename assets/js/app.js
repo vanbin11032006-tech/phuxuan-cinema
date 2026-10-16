@@ -372,7 +372,7 @@ async function openAdmin() {
                 <div class="form-grid"><div class="form-field"><label>Đạo diễn</label><input name="director"></div><div class="form-field"><label>Diễn viên</label><input name="cast_names"></div></div>
                 <div class="form-grid"><div class="form-field"><label>Ngôn ngữ</label><input name="language" value="Tiếng Việt"></div><div class="form-field"><label>Trailer URL</label><input name="trailer_url"></div></div>
                 <div class="form-field"><label>Ảnh nền URL</label><input name="backdrop_url"></div>
-                <div class="form-grid"><button class="button button-gold">Thêm phim</button><button type="reset" class="button button-outline" style="color:var(--ink);border-color:var(--line)">Làm mới biểu mẫu</button></div></form>
+                <div class="form-grid"><button type="submit" class="button button-gold">Thêm phim</button><button type="reset" class="button button-outline" style="color:var(--ink);border-color:var(--line)">Làm mới biểu mẫu</button></div></form>
                 <div class="admin-list" style="margin-top:12px">${result.movies.map(movie => `<div class="admin-list-row"><span>${safe(movie.title)} · ${safe(movie.status)}</span>
                 <div><button data-edit-movie="${movie.id}">Sửa</button><button data-delete-movie="${movie.id}">Xóa</button></div></div>`).join('')}</div></div>
             <div class="admin-section"><h3>Lên lịch chiếu</h3><form class="form-stack" id="admin-show-form">
@@ -390,7 +390,7 @@ async function openAdmin() {
                 <div class="form-field"><label>Phân loại</label><select name="category"><option value="combo">Combo</option><option value="popcorn">Bắp</option><option value="drink">Nước</option><option value="snack">Đồ ăn nhẹ</option></select></div>
                 <div class="form-field"><label>Mô tả</label><input name="description"></div>
                 <div class="form-field"><label>Ảnh sản phẩm URL</label><input name="image_url"></div>
-                <button class="button button-gold" style="align-self:end">Thêm sản phẩm</button></form>
+                <button type="submit" class="button button-gold" style="align-self:end">Thêm sản phẩm</button><button type="reset" class="button button-outline" style="color:var(--ink);border-color:var(--line)">Làm mới biểu mẫu</button></form>
                 <div class="admin-list" style="margin-top:12px">${result.products.map(product => `<div class="admin-list-row"><span>${safe(product.name)} · ${money(product.price)} · ${Number(product.active) ? 'Đang bán' : 'Tạm ẩn'}</span>
                 <div><button data-edit-product="${product.id}">Sửa</button><button data-toggle-product="${product.id}">${Number(product.active) ? 'Ẩn' : 'Bán lại'}</button></div></div>`).join('')}</div></div>
             <div class="admin-section"><h3>Hệ thống rạp & phòng chiếu</h3>
@@ -615,6 +615,17 @@ document.addEventListener('change', event => {
         state.movieStatus = event.target.dataset.status;
         renderMovies();
     }
+});
+
+document.addEventListener('reset', event => {
+    const labels = {
+        'admin-movie-form': 'Thêm phim',
+        'admin-product-form': 'Thêm sản phẩm'
+    };
+    const label = labels[event.target.id];
+    if (!label) return;
+    const submitButton = event.target.querySelector('button[type="submit"]');
+    if (submitButton) submitButton.textContent = label;
 });
 
 document.addEventListener('submit', async event => {
